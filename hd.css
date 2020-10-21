@@ -1,0 +1,526 @@
+/*제작노하우 두번 일 안하기
+
+1. position 세팅
+2. float+clear
+3. display 세팅
+4. overflow, margin, padding
+*/
+
+/*정보수집용 블럭요소 안에 인라인 태그 넣기
+  display:none은 데이터 수집 안되고 웹표준, 접근성 하나도 못지키므로 절대 넣지 말기
+  img의 alt태그 꼭 챙겨 넣기, a태그의 컨텐츠 비워두지 않기, display:none 하지말기*/
+ *:focus { outline:none; }
+.wrap { outline: none; vertical-align: middle;}
+.wrap h3:before { border-bottom: 2px solid #222}
+.sectionWrap h3 { font-size: 40px; color: #222; padding: 50px 0;
+	                line-height: 50px; text-align: center; }
+
+.blind { position: absolute; width: 1px !important; height: 1px !important;
+			   overflow: hidden; visibility: hidden;
+			   font-size: 0; line-height: 0;
+	       text-indent:-99999px; margin: 0 !important; padding: 0 !important }
+.mainWrap { position: relative; }
+.prev a, .next a { font: 0/0 all; display: block;
+			             position: absolute; top:0; right: 0; left: 0; bottom: 0; }
+.prev, .next { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10000;
+               padding: 5px; border:2px solid white; border-radius: 50%; }
+.prev{left: 0}
+.next{right: 0}
+
+/* section의 각 id마다 패딩주기 */
+#aboutme,
+#ability,
+#portfolio,
+#work,
+#interview,
+#instagram {
+	padding: 50px 0;
+}
+
+
+/* 버튼 속성 */
+#aboutme button,
+#ability button,
+#work button,
+#portfolio button {border:2px solid #222; background:#222;
+				            width: 100px; height: 40px; color:white; transition: 0.5s;
+									 }
+#aboutme button:hover,
+#ability button:hover,
+#work button:hover,
+#portfolio button:hover { background-color: #12c2e9; border:#12c2e9;  }
+
+/* 반응형 컨텐츠 공통클래스  */
+.mView { display: none; }
+
+/* 사이트 클릭시 뜨는 가장 큰 팝업 */
+.bigcover { overflow-y: hidden !important;}
+#workIntroduce{ position: fixed; top:0; left: 0; right: 0; bottom: 0; z-index: 1000000000;
+								background-color: rgba(.5,0,0,.7);}
+.workIn_content_wrap { position: relative; margin: auto; width: calc(100% - 30px);
+											 height: calc(100% - 30px); max-width: 500px;
+										   border: 2px solid #68b2e0; transform: translateY(-50%);
+										   background-color: #68b2e0; left: 0; right: 0; bottom: 0; top: 50%;
+										   max-height: 300px; border-radius: 50px; line-height: 50px;
+											  padding-top: 50px;
+												}
+.workIn_content_wrap:after{ content: ""; position: absolute; right: 100%; top: 200px;
+                            width: 0; height: 0; border-top: 40px solid transparent;
+													  border-right: 80px solid #68b2e0; border-bottom: 40px solid transparent; }
+#pop_cls_btn { float: right; position: relative;
+							 color: white; font-size: 20px; background-color: black;
+							 margin-top: -30px; margin-right: 40px; border-radius: 50%;
+						   padding: 5px 10px; }
+.workIn_content {  margin: 0 auto; text-align: center; padding-top: 5px;
+                   line-height: 40px; }
+	.workIn_content strong { font-size: 25px; position: relative; padding-bottom: 10px;
+	                         color:black;	}
+	.workIn_content strong:after{ content: "";  width: 50px; height: 2px;
+	                              position: absolute; left: 50%;
+																bottom: -14px;
+																transform: translateX(-50%);
+	                              background-color: white; }
+  .info_port{ padding-top:30px; }
+	.workIn_content p{ font-size: 20px; color: white; }
+	.workIn_content p:first-child{ color: black; }
+
+/*퀵메뉴. 마우스 이벤트를 받는 객체는 스타일 변화를 주면 안된다!!!!! 예)여기서 하버를 주려면 a나 img가 아니라* li에 주어야함*/
+
+#quick { position:fixed; right:0px; bottom:50px;
+			   width: 100px; z-index: 10000;
+			   background-color:aliceblue;
+			   border: none; padding: 30px 0;
+	       border-radius: 70px;
+	      }
+#quick h3 { text-align: center; color: dimgray; }
+#quick ul { }
+#quick ul li:hover a { margin-left: -140px; background-color:#68D3E9;
+                       padding:0 20px; border-radius: 70px;
+                      }
+#quick ul li a { display: block; width: 400px; transition: 0.8s; }
+#quick ul li a img { width: 90px; margin: 5px; vertical-align: middle; }
+#quick ul li a span { padding: 0 5px; }
+
+/*면접제의*/
+#quick h3 a { }
+#quick h3 a + #form { }
+/*h3에 마우스 오버되었을 때 자식객체 #form의 스타일 내용*/
+/*
+#quick h3:hover #form{display: block; background-color: cornflowerblue;
+                      }
+*/
+#form { display: none;
+			  position: absolute; right: 100%;
+			  width: 300px; padding: 20px; color: white;
+			  top:-20px; margin-top: 30px; border-radius: 10px;
+			  min-height:200px; /*민하이트는 잠깐만 넣은거임~*/
+		   }
+
+/*중요함~! 가상선택자 비포애프터가 z레벨이 너무 높아서
+          글자를 넣으면 그 뒤로 빠져버리는데,
+          이때 글자를 div태그로 한 번 더 감싸주고
+          해당 div 자체에 포지션 (랠러티브) 주기!!*/
+#form .form_inner{position: relative;}
+
+#form:after,
+#form:before { content: ""; display: block;
+               position: absolute; }
+#form:before { background-color: #92C8DB; top: 15px; left:15px;
+               right:15px; bottom: 15px; }
+#form:after { background-color: #92C8DB; width: 20px; height: 20px;
+              right: 5px; top: 20px;  transform: rotate(-45deg);
+              }
+
+
+#quick h3 #form { transition:0.6s; }
+
+/*카카오*/
+.kakao { position: fixed; right:5px; top:55%; width:90px;
+         z-index: 10000; }
+.kakao a { display: block; vertical-align: middle }
+.kakao a img { }
+
+/*상단*/
+.wrap > section { padding: 80px 0; }
+
+.wrap > section h3 { text-align: center;}
+
+/*배너*/
+#mainEvent div[class^='banner'] {background-repeat: no-repeat;
+                                 background-position: center top;
+                                 background-size: 100% auto;
+                                 }
+#mainEvent .banner1 { background-image: url(/img/big/banner1f.gif) }
+#mainEvent .banner2 { background-image: url(/img/mainbanner2.jpg) }
+#mainEvent .banner3 { background-image: url(/img/thirdbanner.gif) }
+#mainEvent { margin-top: 60px; position: relative;}
+#mainEvent div a { display: block; padding-bottom: 31%; }
+#mainEvent .slider-prev { position: absolute; left: 0;  background: black;
+				                  top: 50%; transform: translateX(-50%);
+				                  color:white; z-index: 100;
+												  background-color: #12c2e9;
+												  border-radius: 50%; }
+#mainEvent .slider-arrow { position: absolute; right: 0; background: black;
+	                         top: 50%; transform: translateX(-50%);
+	                         color:white; z-index: 100;
+													 background-color: #12c2e9;
+													 border-radius: 50%; }
+.bgGray { background-color: #f1f1f1 }
+
+
+
+
+/*/헤더*/
+#hd { position: fixed; top:0; left:0; right: 0; z-index: 1000000;
+			line-height: 60px;
+			border-bottom: none;
+			background-size: 200% 200%;
+			background: #222;
+			padding-top: -50px;
+		 }
+#hd h1 { float:left;  overflow: hidden;  background-size:50px; }
+#hd h1 a{ color:white; }
+#hd h1 a{ display: block; width: 100px; height: 60px; }
+#hd h1 a img { width:70px; height: 70px; }
+
+@media (max-width:1024px) {
+  #mainEvent div a {  padding-bottom:88%; }
+  #mainEvent .banner1 { background-image:url(/img/m_banner3_edit.gif); }
+  #mainEvent .banner2 { background-image:url(/img/m_banner2.png); }
+  #mainEvent .banner3 { background-image:url(/img/m_banner_pink.jpg)} }
+
+#gnb { float:right; }
+#gnb li { float:left; margin:0 15px; color:white;
+}
+#gnb li:after { content: ""; display: block;
+	              height: 3px; width: 0;
+                background-color: white; transition: 0.4s; }
+#gnb li:hover:after { width:100%; }
+#gnb li:hover:after { background-color:#3b237b }
+#gnb li a { color:white; font-size: 16px; font-weight: bold}
+#gnb li:hover a { color:#3b237b }
+
+#mgnb { display: none }
+
+/* 모바일 퀵메뉴 리스트 메뉴추가 */
+#gnb .mView li { display: inline-block; max-width: 80px; line-height: 2;
+	               font-size: 12px; vertical-align: top; }
+#gnb .mView img { width: 100%; }
+
+/*나란 인간?*/
+#aboutme { min-height: 600px;
+					background-color: white;
+				  }
+#aboutme h3 {}
+#aboutme p { margin: 35px 0; font-size: 40px; }
+#aboutme button { margin: 50px 0 }
+
+.sectionWrap #h3 { margin-top:40px; }
+
+/*능력*/
+#ability { min-height: 600px; }
+
+#ability h3 {}
+#ability p { margin: 50px 0}
+#ability p { font-size: 40px; }
+
+/*포트폴리오 구간*/
+#portfolio { background-color: white; }
+#portfolio h3 {}
+#portfolio p { font-size: 20px; }
+#portfolio ul { padding:50px 0; }
+#portfolio ul li { display: inline-block; padding: 10px; }
+#portfolio .port_img { width:350px;
+											 background: url(/img/small/port.jpg) no-repeat;
+											 position: relative; }
+.port_img .port_cover { width: 290px; height: 200px;
+												transition: 0.4s;
+												background: black;
+												opacity: 0;
+												padding: 30px; }
+.port_img:hover .port_cover{ opacity: 0.6;
+														 text-align: center;
+														 color: white; }
+.port_cover p{padding-top: 30%;}
+#portfolio ul li div { margin:20px 0; }
+
+/*작업들!*/
+#work{min-height: 600px;
+		  padding-bottom: 50px;
+			position: relative;
+	     }
+.workRight { position: absolute;
+						right: 20%;
+						top:33%;
+					}
+#work  p{}
+	.wie {}
+	.wie h3 {}
+	.wie p { padding:20px 0; font-size: 30px; }
+
+	/*사전 인터뷰*/
+#interview { min-height: 600px;}
+#interview h3 {}
+#interview p { margin: 50px 0; font-size: 40px; }
+#interview dl { line-height: 3; font-size: 18px;
+	              }
+#interview *{ vertical-align: middle;}
+#interview dl > *{padding:0 20px; margin-top: 10px;}
+#interview dl > *::before{margin-right: 15px; vertical-align: middle; padding: 20px;}
+#interview dt{ background-color: white}
+
+	/*dt 안으로 들어가서 맨 앞자리*/
+#interview dt:before{content:url(/img/Q_perf.svg);
+			                 display: inline-block; width:20px; height: 20px;
+			                 padding-top: -10px;
+											 transform: translateY(-12px);
+	                     }
+
+	/*dt 안으로 들어가서 맨 뒷자리*/
+#interview dt:after{content:url(/img/tiny/plusn.svg);  position: relative; float: right;
+	                    transform: translate(-8px,11px); width:20px; height: 20px;}
+
+#interview dd{background-color: #eee; display: none;}
+#interview dd:before{content: url(/img/A.svg); display: inline-block; width:22px; height: 22px;
+	                   transform: translateY(-12px);	}
+
+
+	/*dt태그에 클래스 show가 먹히면 그 바로 아래 하나의 dd태그는 보여라! 라는 뜻
+	  인터뷰의 쇼라는 클래스를 가진 디티 아래의 dd만 보여준다. */
+#interview dt.show + dd{display: block}
+#interview dt.show:after{content:url(/img/tiny/minusn.svg);position: relative; float: right;
+	                        transform: translate(-8px,11px); display: inline-block; width:20px; height: 20px;}
+/* 면접제안 */
+#interview .suggest { font-size: 30px; color: #222;  border-top: 3px solid #eee;
+	                    margin: 50px 0 -130px 0}
+#interview .suggest p { font-size: 30px; line-height: 30px; margin: 30px 0;}
+
+/*인스타그램*/
+#instagram {
+           background-color: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+#instagram h3 {}
+#instagram p { font-size: 35px; margin: 50px 0; }
+#instagram .instaLink > p { font-size: 20px; color: #222; }
+.insta_img img { width:250px; position: relative;}
+#instagram button { color: white;
+										width:90px; height: 40px;
+										background-color: rgba(0,168,210,0.6);
+										position: absolute;
+										z-index: 100000;
+										transition: 0.3s;
+			             }
+#instagram button:hover{ background: rgba(0,168,210,1);}
+#instagram button:first-child{ left: 0; top:50%; transform: translateY(-50%);}
+#instagram button:last-child{ right: 0; bottom: 50%; transform: translateY(50%);}
+
+/*푸터*/
+
+#ft { position: relative; background-color: white; color:#222;
+	    text-align: center; vertical-align: top;
+		  margin: 0 auto; margin: 100px 0; padding: 50px 0;
+		  border-top: 1px solid #eee; }
+#ft .ftWRap { display: table; }
+#ft .call,
+#ft .myinfos,
+#ft .snstag { display: table-cell; padding: 50px; }
+
+#ft .call { }
+#ft .myinfos { }
+#ft .snstag {  }
+#ft .snstag a > img { width: 35px; height: 35px; }
+
+/*배너 슬라이드*/
+.bx-wrapper .bx-pager.bx-default-pager a { width:20px; height: 20px;
+	                                     transition: 0.5s;
+                                         border-radius:30px; }
+.bx-wrapper .bx-pager.bx-default-pager a.active { background-color: skyblue; width:60px;  }
+
+/*유튜브 반응형 처리하기-포지션 압솔루트!*/
+.ytbContent{ width: 700px; }
+.youtube { position: relative; padding-bottom: 56%; width: 100%; }
+.youtube iframe { position: absolute; height: 100%; width: 100%; left: 0; top: 0; }
+.youtube { margin: 40px;}
+
+ /*모바일 화면 : 반응형!*/
+@media (max-width:768px){
+	.mView { display: block !important }
+	.pcView { display: none !important }
+	#gnb {
+    display: none;
+		position: absolute;
+		background: linear-gradient(to right, #12c2e9, #c471ed, #f64f59);
+		left: 0; right: 0; top:60px;
+		z-index: 1000000;
+		text-align: center;
+	     }
+	#gnb li { display: block; float: none; }
+	#gnb li a span { font-size: 12px; }
+
+  #mgnb { display: block; float: right; line-height: 72px;
+	       color: #222}
+
+	.kakao { display: none; }
+
+	.mainWrap .prev { display: none; }
+	.mainWrap .next { display: none; }
+}
+
+/* 나의 능력 다이어그램 */
+/* Variables & Mixings */
+.clearfix {
+  display: block;
+  content: " ";
+  clear: both;
+  zoom: 1;
+}
+.clearfix:before, .clearfix:after {
+  display: block;
+  content: " ";
+  clear: both;
+  zoom: 1;
+}
+
+/* Resets */
+.skill_wrap {
+  margin: 0 auto;
+  padding: 50px;
+  max-width: 100%;
+  /* The Skills BarChart */
+}
+.skill_wrap h2 {
+  text-align: center;
+	padding-bottom: 50px;
+}
+.skill_wrap .barGraph {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+.skill_wrap .graph {
+  position: relative;
+  list-style-type: none;
+  width: calc(85%);
+  left: 4%;
+	margin: 0 auto;
+}
+.skill_wrap .barback-wrapper {
+  /* border-bottom: 1px solid #ececec; */
+  height: 50px;
+  padding: 20px 0;
+}
+.skill_wrap .barback-wrapper:last-child {
+  border-bottom: none;
+}
+.skill_wrap .graph-barBack {
+  /* border-radius: 2px;
+  background: #f6f6f7; */
+  margin-bottom: 20px;
+  display: block;
+	border: 1px solid white;
+	border-radius: 70px;
+}
+.skill_wrap .graph-bar {
+  background-color: #EFB04E;
+  transition: all 1.5s ease-out;
+  border-radius: 70px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 9999;
+  display: block;
+  height: 10px;
+  width: 0%;
+}
+.skill_wrap .graph-bar.business,
+.skill_wrap .graph-bar.quality,
+.skill_wrap .graph-bar.people,
+.skill_wrap .graph-bar.community { background:linear-gradient(to right,#1671a8,#14c1e9 ); }
+
+.skill_wrap .graph-bar:last-child {
+  margin-bottom: 0;
+}
+.skill_wrap .graph-bar:after {
+  position: absolute;
+  content: attr(data-value) "%";
+  font-size: 14px;
+  border-radius: 50% 50% 50% 0%;
+  background: white;
+  color: #14c1e9;
+  line-height: 30px;
+  height: 30px;
+	width: 30px;
+  padding: 10px;
+  margin-left: 5px;
+  left: 97%;
+  top: -60px;
+
+}
+.skill_wrap .graph-legend {
+  position: absolute;
+  margin-right: 10px;
+  left: 25px; top:-35px;
+  z-index: 9999;
+}
+
+
+/* 폼박스 */
+
+.formBox {
+	background-color: #ffe680
+}
+.formBox ::-moz-selection {
+  color: #222;
+  background: white;
+}
+.formBox ::selection {
+  color: #222;
+  background: white;
+}
+.formBox .form__contact {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.formBox .form__contact fieldset {
+  position: relative;
+  margin: 0;
+  padding: 30px 30px 40px 80px;
+  border: none;
+}
+.formBox .form__contact p {
+  margin: 0 0 40px 0;
+  line-height: 40px;
+  color: #333;
+}
+.formBox .form__contact span {
+  position: relative;
+  line-height: 40px;
+}
+.formBox .form__contact button {
+  margin-top: 40px;
+	padding: 10px 20px;
+  float: right;
+  border: none;
+	font-size: 14px;
+  color: white;
+	font-weight: bold;
+  background: #222;
+  cursor: pointer;
+	transition: 0.4s;
+}
+.formBox .form__contact button:hover { background-color: #12c2e9; }
+.formBox .form__field {
+  display: inline;
+  color: #7DB665;
+  outline: none;
+}
+.formBox .form__field:empty {
+  display: inline-block;
+  color: #DDD;
+}
+.formBox .form__field:empty:before, .formBox .form__field:empty:focus:before {
+  content: attr(data-placeholder);
+}
+.formBox svg {
+  display: none;
+}
